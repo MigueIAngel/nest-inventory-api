@@ -7,7 +7,11 @@ async function bootstrap() {
   app.setGlobalPrefix('api', { exclude: ['health'] });
   app.enableCors({ origin: process.env.CORS_ORIGIN?.split(',') ?? true });
   app.useGlobalPipes(
-    new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }),
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
   );
   await app.listen(process.env.PORT ?? 3000);
 }
