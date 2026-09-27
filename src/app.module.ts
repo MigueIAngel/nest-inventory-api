@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AuthModule } from './auth/auth.module.js';
 import { databaseConfig } from './config/database.config.js';
+import { MovementsModule } from './movements/movements.module.js';
 import { ProductsModule } from './products/products.module.js';
 import { SuppliersModule } from './suppliers/suppliers.module.js';
 import { UsersModule } from './users/users.module.js';
@@ -19,6 +20,7 @@ import { UsersModule } from './users/users.module.js';
     AuthModule,
     SuppliersModule,
     ProductsModule,
+    MovementsModule,
   ],
   controllers: [AppController],
 })
