@@ -1,6 +1,6 @@
 {
   "name": "nest-inventory-api",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Inventory management REST API built with NestJS, TypeORM and PostgreSQL",
   "author": "Miguel Ángel Altamar",
   "private": true,
