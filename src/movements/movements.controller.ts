@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import {
   type AuthUser,
@@ -7,6 +8,7 @@ import { CreateMovementDto } from './dto/create-movement.dto.js';
 import { MovementQueryDto } from './dto/movement-query.dto.js';
 import { MovementsService } from './movements.service.js';
 
+@ApiTags('movements')
 @Controller('movements')
 export class MovementsController {
   constructor(private readonly movementsService: MovementsService) {}
