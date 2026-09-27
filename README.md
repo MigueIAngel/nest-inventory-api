@@ -10,6 +10,10 @@ An inventory management REST API built with **NestJS** and **TypeORM**. It manag
 
 The companion admin panel built with Angular is available at [angular-admin](https://github.com/MigueIAngel/angular-admin).
 
+**Live demo:** [Swagger UI](https://nest-inventory-api-demo.onrender.com/docs) · [Angular admin panel](https://angular-admin-demo.onrender.com) (log in with `admin@inventory.dev` / `admin123`).
+
+> Hosted on Render's free plan: the first request after a period of inactivity can take up to a minute while the service wakes up. Demo data is reset on every restart.
+
 ## Features
 
 - **Modular architecture**: one Nest module per domain (auth, users, suppliers, products, movements, dashboard, seed)
