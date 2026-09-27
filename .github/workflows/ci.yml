@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npx prettier --check "src/**/*.ts" "test/**/*.ts"
+      - run: npm run build
+      - run: npm test
+      - run: npm run test:e2e
+
+  postgres-smoke-test:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: inventory
+          POSTGRES_PASSWORD: inventory
+          POSTGRES_DB: inventory
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U inventory"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      DB_PORT: 5432
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci && npm run build
+      - name: Boot the API against PostgreSQL and hit the endpoints
+        run: |
+          node dist/main.js &
+          for i in $(seq 1 30); do curl -sf localhost:3000/health && break; sleep 1; done
+          TOKEN=$(curl -sf -X POST localhost:3000/api/auth/login -H 'content-type: application/json' \
+            -d '{"email":"admin@inventory.dev","password":"admin123"}' | jq -r .accessToken)
+          curl -sf localhost:3000/api/dashboard/summary -H "Authorization: Bearer $TOKEN" | jq .totalProducts
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t nest-inventory-api .
